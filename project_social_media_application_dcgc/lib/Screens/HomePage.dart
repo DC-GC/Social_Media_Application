@@ -4,6 +4,7 @@ import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:project_social_media_application_dcgc/Screens/LoginPage.dart';
+import 'package:project_social_media_application_dcgc/Screens/UpdateProfilePage.dart';
 
 class HomePage extends StatefulWidget {
   String? token;
@@ -26,8 +27,28 @@ class _HomePageState extends State<HomePage> {
   List<String> dropdownitems = ['Friends Only', 'Public'];
   String? selecteditem = 'Friends Only';
   final TextEditingController _Createpost = TextEditingController();
+  List<String>posts = [];
+  
 
   
+  void getposts(numOfPosts, lastId) async{
+    final url = "https://cmsc-23-2022-bfv6gozoca-as.a.run.app/api/post?";
+    try{
+          final response = await get(Uri.parse("$url limit=$numOfPosts&next=$lastId&$username"), 
+          headers: <String, String>{
+            "accept": "application/json",
+            // "Content-Type": "application/json",
+            "Authorization": "Bearer $token_authorization",
+          },
+          );
+          
+          final responsedata = jsonDecode(response.body);
+          print(responsedata);
+          
+          } catch(err){
+
+          }
+  }
 
   void getAccountDetails() async{
     
@@ -89,6 +110,7 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     getAccountDetails();
+    
   }
 
 
@@ -97,7 +119,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     
     return Scaffold(
-      drawer: NavigationDrawer(username, firstname, lastname),
+      drawer: NavigationDrawer(username, firstname, lastname, token_authorization),
       appBar: AppBar(
         title: Text("Home Page"),
       ), // Text(token_authorization ?? 'no key provided')
@@ -167,6 +189,14 @@ class _HomePageState extends State<HomePage> {
                     
                   ],
                 ),
+                ListView.builder(
+                  padding: EdgeInsets.all(24),
+                  itemCount: posts.length,
+                  itemBuilder: (context, index){
+                    final lastPost = posts[index];
+                    return ListTile(title: Text(lastPost));
+                  },
+                ),
         ],
         ),
       ) ,
@@ -181,7 +211,8 @@ class NavigationDrawer extends StatelessWidget {
   final String? username;
   final String? firstname;
   final String? lastname;
-  const NavigationDrawer(this.username, this.firstname, this.lastname);
+  final String? token_authorization;
+  const NavigationDrawer(this.username, this.firstname, this.lastname, this.token_authorization);
 
   @override
   Widget build(BuildContext context) => Drawer(
@@ -191,7 +222,7 @@ class NavigationDrawer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           MenuHeader(context, username, firstname, lastname),
-          MenuItems(context),
+          MenuItems(context, token_authorization, username, firstname, lastname),
         ],
       ),
     ),
@@ -220,7 +251,8 @@ Widget MenuHeader(BuildContext context, String? username, String? firstname, Str
     ),
   );
 
-  Widget MenuItems(BuildContext context) =>Container(
+
+  Widget MenuItems(BuildContext context, String? token_authorization ,String? username, String? firstname, String? lastname) =>Container(
     padding: EdgeInsets.all(24),
     child:  Wrap(
         runSpacing: 15,
@@ -236,7 +268,10 @@ Widget MenuHeader(BuildContext context, String? username, String? firstname, Str
           ListTile(
             leading: const Icon(Icons.settings),
             title: Text("Update Profile"),
-            onTap: (){},
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateProfilePage(token_authorization, username, firstname, lastname )));
+
+            },
           ),
           ListTile(
             leading: const Icon(Icons.account_box_outlined),
