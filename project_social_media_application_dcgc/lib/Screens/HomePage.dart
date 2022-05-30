@@ -27,29 +27,12 @@ class _HomePageState extends State<HomePage> {
   List<String> dropdownitems = ['Friends Only', 'Public'];
   String? selecteditem = 'Friends Only';
   final TextEditingController _Createpost = TextEditingController();
-  List<String>posts = [];
+  final ScrollController _Viewpost = ScrollController();
+  var posts = [];
   
 
   
-  void getposts(numOfPosts, lastId) async{
-    final url = "https://cmsc-23-2022-bfv6gozoca-as.a.run.app/api/post?";
-    try{
-          final response = await get(Uri.parse("$url limit=$numOfPosts&next=$lastId&$username"), 
-          headers: <String, String>{
-            "accept": "application/json",
-            // "Content-Type": "application/json",
-            "Authorization": "Bearer $token_authorization",
-          },
-          );
-          
-          final responsedata = jsonDecode(response.body);
-          print(responsedata);
-          
-          } catch(err){
-
-          }
-  }
-
+  
   void getAccountDetails() async{
     
     final url = "https://cmsc-23-2022-bfv6gozoca-as.a.run.app/api/user";
@@ -63,7 +46,7 @@ class _HomePageState extends State<HomePage> {
           );
           
           final responsedata = jsonDecode(response.body);
-          print(responsedata);
+          // print(responsedata);
           setState(() {
             firstname = responsedata["data"]["firstName"];
             lastname = responsedata["data"]["lastName"];
@@ -91,7 +74,7 @@ class _HomePageState extends State<HomePage> {
           );
           
           final responsedata = jsonDecode(response.body);
-          print(responsedata);
+          // print(responsedata);
           ScaffoldMessenger.of(this.context).showSnackBar(
             const SnackBar(content: Text("Post has been created")),
           );
@@ -102,7 +85,32 @@ class _HomePageState extends State<HomePage> {
     // print("${_Email.text}");
   }
 
-  
+  Future getPosts(int numOfPosts, String? lastId) async{
+    final url = "https://cmsc-23-2022-bfv6gozoca-as.a.run.app/api/post";
+
+    try{
+          final response = await get(Uri.parse("$url?limit=$numOfPosts&next=$lastId&username=$username"), 
+          headers: <String, String>{
+            "accept": "application/json",
+            // "Content-Type": "application/json",
+            "Authorization": "Bearer $token_authorization",
+          },
+          );
+          
+          final responsedata = jsonDecode(response.body);
+          final jsonData = responsedata["data"] as List;
+          // print(jsonData);
+          // print(responsedata);
+          // print(responsedata["data"]);
+          setState(() {
+            posts.addAll(jsonData);
+            
+          });
+          
+          } catch(err){
+              print(err);
+          }
+  }
   
 
   @override
@@ -110,6 +118,17 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     getAccountDetails();
+    getPosts(8, "");
+    _Viewpost.addListener(() {
+      if(_Viewpost.position.maxScrollExtent == _Viewpost.offset){
+
+        if(posts.isNotEmpty){
+
+          getPosts(8, posts[posts.length-1]["id"]);
+        }
+        
+      }
+    });
     
   }
 
@@ -125,6 +144,7 @@ class _HomePageState extends State<HomePage> {
       ), // Text(token_authorization ?? 'no key provided')
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
+        controller: _Viewpost,
         child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -167,7 +187,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                     onPressed: (){
                       createPost();
-                      
+                       
+                     
                       },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),),
@@ -189,12 +210,20 @@ class _HomePageState extends State<HomePage> {
                     
                   ],
                 ),
+                
                 ListView.builder(
-                  padding: EdgeInsets.all(24),
-                  itemCount: posts.length,
-                  itemBuilder: (context, index){
-                    final lastPost = posts[index];
-                    return ListTile(title: Text(lastPost));
+                  shrinkWrap: true,
+                  // physics: NeverScrollableScrollPhysics(),
+                  itemCount: posts.length+1,
+                  itemBuilder: (context, i){
+                    if(i < posts.length){
+                      final currentpost = posts[i];
+                      return ListTile(title: Text("${currentpost["text"]}"));
+                    }else {
+                      return const Padding(padding: EdgeInsets.symmetric(vertical: 24),
+                      child: Center(child: CircularProgressIndicator()));
+                    }
+                    
                   },
                 ),
         ],
