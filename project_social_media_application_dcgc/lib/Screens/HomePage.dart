@@ -85,11 +85,39 @@ class _HomePageState extends State<HomePage> {
     // print("${_Email.text}");
   }
 
+    void deletePost(String? postId) async{
+    
+    final url = "https://cmsc-23-2022-bfv6gozoca-as.a.run.app/api/post/";
+    try{
+          final response = await delete(Uri.parse("$url$postId"), 
+          headers: <String, String>{
+            "accept": "application/json",
+            // "Content-Type": "application/json",
+            "Authorization": "Bearer $token_authorization",
+          },
+          // body: jsonEncode({
+          //       "text": _Createpost.text,
+          //       "public": selecteditem == 'Public'? true:false,
+          //       }),
+          );
+          
+          final responsedata = jsonDecode(response.body);
+          print(responsedata);
+          ScaffoldMessenger.of(this.context).showSnackBar(
+            const SnackBar(content: Text("Post has been deleted")),
+          );
+          _Createpost.clear();
+          } catch(err){
+
+          }
+    // print("${_Email.text}");
+  }
+
   Future getPosts(int numOfPosts, String? lastId) async{
     final url = "https://cmsc-23-2022-bfv6gozoca-as.a.run.app/api/post";
 
     try{
-          final response = await get(Uri.parse("$url?limit=$numOfPosts&next=$lastId&username=$username"), 
+          final response = await get(Uri.parse("$url?limit=$numOfPosts&next=$lastId"), 
           headers: <String, String>{
             "accept": "application/json",
             // "Content-Type": "application/json",
@@ -139,6 +167,7 @@ class _HomePageState extends State<HomePage> {
     
     return Scaffold(
       drawer: NavigationDrawer(username, firstname, lastname, token_authorization),
+      backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
       appBar: AppBar(
         title: Text("Home Page"),
       ), // Text(token_authorization ?? 'no key provided')
@@ -201,7 +230,7 @@ class _HomePageState extends State<HomePage> {
                       value: selecteditem,
                       items: dropdownitems.map((item) => DropdownMenuItem <String>(
                         value: item,
-                        child: Text(item, style: TextStyle(fontSize: 20),),
+                        child: Text(item, style: TextStyle(fontSize: 20, color: Colors.white),),
                       )).toList(),
                       onChanged: (item) => setState(() { 
                         selecteditem = item;}),
@@ -213,12 +242,34 @@ class _HomePageState extends State<HomePage> {
                 
                 ListView.builder(
                   shrinkWrap: true,
+                  padding: EdgeInsets.symmetric(horizontal: 20) ,
+                  
                   // physics: NeverScrollableScrollPhysics(),
                   itemCount: posts.length+1,
                   itemBuilder: (context, i){
                     if(i < posts.length){
                       final currentpost = posts[i];
-                      return ListTile(title: Text("${currentpost["text"]}"));
+                      return Card(
+                                  margin: EdgeInsets.only(top:10, ),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
+                                  elevation: 5,
+                                  child: ListTile(title: currentpost["username"] == username? 
+                                                          Text("Me", style: TextStyle(fontSize: 14, fontWeight:FontWeight.bold, ),):
+                                                          Text("${currentpost["username"]}",style: TextStyle(fontSize: 14, fontWeight:FontWeight.bold,),),
+                                                  subtitle: Text(" -> ${currentpost["text"]}", style: TextStyle(fontSize: 20),),
+                                                  trailing: currentpost["username"] == username? Row(children: [
+                                                            IconButton(onPressed: () {setState(() {deletePost(currentpost["id"]);
+                                                                                                  posts.clear();
+                                                                                                  getPosts(8, "");
+                                                                                                  });}, icon: Icon(Icons.delete)),
+                                                            IconButton(onPressed: () {setState(() {});}, icon: Icon(Icons.create_sharp)),],
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  ):null,
+                                      ),
+                              );
+                      
+                      
+                      
                     }else {
                       return const Padding(padding: EdgeInsets.symmetric(vertical: 24),
                       child: Center(child: CircularProgressIndicator()));
