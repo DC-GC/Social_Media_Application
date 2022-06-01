@@ -1,8 +1,9 @@
 import 'dart:html';
-
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:project_social_media_application_dcgc/Screens/EditPostPage.dart';
 import 'package:project_social_media_application_dcgc/Screens/LoginPage.dart';
 import 'package:project_social_media_application_dcgc/Screens/UpdateProfilePage.dart';
 
@@ -216,7 +217,14 @@ class _HomePageState extends State<HomePage> {
                     ),
                     onPressed: (){
                       createPost();
-                       
+                      Future.delayed(Duration(milliseconds: 750), (){
+                        setState(() {
+                          posts.clear();
+                          getPosts(8, "");
+                        });
+                        
+                      });
+                      
                      
                       },
                     style: ElevatedButton.styleFrom(
@@ -249,20 +257,28 @@ class _HomePageState extends State<HomePage> {
                   itemBuilder: (context, i){
                     if(i < posts.length){
                       final currentpost = posts[i];
+                      var datetime = DateTime.fromMillisecondsSinceEpoch(currentpost["date"]);
                       return Card(
                                   margin: EdgeInsets.only(top:10, ),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
                                   elevation: 5,
                                   child: ListTile(title: currentpost["username"] == username? 
-                                                          Text("Me", style: TextStyle(fontSize: 14, fontWeight:FontWeight.bold, ),):
-                                                          Text("${currentpost["username"]}",style: TextStyle(fontSize: 14, fontWeight:FontWeight.bold,),),
+                                                          Text("YOU posted at ${DateFormat('MM/dd/yyyy, hh:mm a').format(datetime)}", style: TextStyle(fontSize: 14, fontWeight:FontWeight.bold, ),):
+                                                          Text("${currentpost["username"]} posted at ${DateFormat('MM/dd/yyyy, hh:mm a').format(datetime)}",style: TextStyle(fontSize: 14, fontWeight:FontWeight.bold,),),
                                                   subtitle: Text(" -> ${currentpost["text"]}", style: TextStyle(fontSize: 20),),
                                                   trailing: currentpost["username"] == username? Row(children: [
                                                             IconButton(onPressed: () {setState(() {deletePost(currentpost["id"]);
-                                                                                                  posts.clear();
-                                                                                                  getPosts(8, "");
+                                                                                                  Future.delayed(Duration(milliseconds: 750), (){
+                                                                                                    posts.clear();
+                                                                                                    getPosts(8, "");
+                                                                                                  });
+                                                                                                  
                                                                                                   });}, icon: Icon(Icons.delete)),
-                                                            IconButton(onPressed: () {setState(() {});}, icon: Icon(Icons.create_sharp)),],
+                                                            IconButton(onPressed: () {setState(() {
+                                                              Navigator.push(context, MaterialPageRoute(builder: (context) => EditPostPage(currentpost["text"],token_authorization, currentpost["id"],username,currentpost["public"])));
+                                                              posts.clear();
+                                                              getPosts(8, "");
+                                                            });}, icon: Icon(Icons.create_sharp)),],
                                                   mainAxisSize: MainAxisSize.min,
                                                   ):null,
                                       ),
