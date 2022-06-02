@@ -116,22 +116,11 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                   child: TextFormField(
                     enabled: false,
                     decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
+                      disabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(30)),
                         borderSide: BorderSide(color: Colors.transparent),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30)),
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30)),
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30)),
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
+                      
                       prefixIcon: Icon(Icons.person),
                       hintText: 'Your Old First Name Is ' + firstname!,
                       fillColor: Colors.grey[200],
@@ -184,22 +173,11 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                   child: TextFormField(
                     enabled: false,
                     decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
+                      disabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(30)),
                         borderSide: BorderSide(color: Colors.transparent),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30)),
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30)),
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30)),
-                        borderSide: BorderSide(color: Colors.red),
-                      ),
+                      
                       prefixIcon: Icon(Icons.person),
                       hintText: 'Your Old Last Name Is ' + lastname!,
                       fillColor: Colors.grey[200],

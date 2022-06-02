@@ -138,6 +138,7 @@ class _EditPostPageState extends State<EditPostPage> {
                       
                       child: DropdownButton<String>(
                       value: selecteditem,
+                      dropdownColor: Color.fromRGBO(58, 66, 86, 1.0),
                       items: dropdownitems.map((item) => DropdownMenuItem <String>(
                         value: item,
                         child: Text(item, style: TextStyle(fontSize: 20, color: Colors.white),),

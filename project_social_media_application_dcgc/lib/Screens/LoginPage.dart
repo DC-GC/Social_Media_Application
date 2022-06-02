@@ -53,9 +53,10 @@ class _LoginPageState extends State<LoginPage> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-      appBar: AppBar(title: Text('Login Page'),
+      appBar: AppBar(title: Text('Login Page',),
       automaticallyImplyLeading: false,
       ),
+      backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -70,15 +71,15 @@ class _LoginPageState extends State<LoginPage> {
                   'Login Page',
                   style: TextStyle(
                     fontWeight:FontWeight.bold, 
-                      color: Colors.black, 
+                      color: Colors.white, 
                         fontSize: 40),
                 ),
                 SizedBox(height: 10,),
                 Text(
-                  'Day 1',
+                  'Welcome',
                   style: TextStyle(
                     fontWeight:FontWeight.bold, 
-                      color: Colors.black, 
+                      color: Colors.white, 
                         fontSize: 25),
                 ),
                 Container(
@@ -180,7 +181,10 @@ class _LoginPageState extends State<LoginPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('do you want to create an account?'),
+                      Text('Do you want to create an account?',style: TextStyle(
+                                                              color: Colors.white, 
+                                                              fontSize: 14,
+                                                              ),),
                       TextButton(
                         style: TextButton.styleFrom(
                           textStyle: const TextStyle(fontSize: 14),

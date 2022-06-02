@@ -51,6 +51,7 @@ class _SignupPageState extends State<SignupPage> {
     return Scaffold(
       appBar: AppBar(title:Text('Signup Page'),
       ),
+      backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -65,7 +66,7 @@ class _SignupPageState extends State<SignupPage> {
                   'Signup Page',
                   style: TextStyle(
                     fontWeight:FontWeight.bold, 
-                      color: Colors.black, 
+                      color: Colors.white, 
                         fontSize: 40),
                 ),
                 SizedBox(height: 10,),
@@ -73,7 +74,7 @@ class _SignupPageState extends State<SignupPage> {
                   'It wont take long',
                   style: TextStyle(
                     fontWeight:FontWeight.bold, 
-                      color: Colors.black, 
+                      color: Colors.white, 
                         fontSize: 25),
                 ),
                 Container(
@@ -309,7 +310,10 @@ class _SignupPageState extends State<SignupPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Already have an account'),
+                      Text('Already have an account', style: TextStyle(
+                                                              color: Colors.white, 
+                                                              fontSize: 14,
+                                                              ),),
                       TextButton(
                         style: TextButton.styleFrom(
                           textStyle: const TextStyle(fontSize: 14),
@@ -317,6 +321,7 @@ class _SignupPageState extends State<SignupPage> {
                         onPressed: () {
                           Navigator.push(context, MaterialPageRoute(builder: (_)=>LoginPage())); 
                         },
+                        
                         child: const Text('Login here'),
                       ),
                     ],

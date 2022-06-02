@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:project_social_media_application_dcgc/Screens/EditPostPage.dart';
 import 'package:project_social_media_application_dcgc/Screens/LoginPage.dart';
 import 'package:project_social_media_application_dcgc/Screens/UpdateProfilePage.dart';
+import 'package:project_social_media_application_dcgc/Screens/ViewPostPage.dart';
 
 class HomePage extends StatefulWidget {
   String? token;
@@ -236,6 +237,7 @@ class _HomePageState extends State<HomePage> {
                       
                       child: DropdownButton<String>(
                       value: selecteditem,
+                      dropdownColor: Color.fromRGBO(58, 66, 86, 1.0),
                       items: dropdownitems.map((item) => DropdownMenuItem <String>(
                         value: item,
                         child: Text(item, style: TextStyle(fontSize: 20, color: Colors.white),),
@@ -281,6 +283,9 @@ class _HomePageState extends State<HomePage> {
                                                             });}, icon: Icon(Icons.create_sharp)),],
                                                   mainAxisSize: MainAxisSize.min,
                                                   ):null,
+                                      onTap:(){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => ViewPostPage(currentpost["text"],token_authorization, currentpost["id"],currentpost["username"],currentpost["date"], currentpost["updated"])));
+                                      } ,
                                       ),
                               );
                       
@@ -369,12 +374,12 @@ Widget MenuHeader(BuildContext context, String? username, String? firstname, Str
 
             },
           ),
-          ListTile(
-            leading: const Icon(Icons.account_box_outlined),
-            title: Text("View Other People"),
-            onTap: (){
-            },
-          ),
+          // ListTile(
+          //   leading: const Icon(Icons.account_box_outlined),
+          //   title: Text("View Other People"),
+          //   onTap: (){
+          //   },
+          // ),
           ListTile(
             leading: const Icon(Icons.logout),
             title: Text("Logout"),
