@@ -1,4 +1,4 @@
-import 'dart:html';
+// import 'dart:html';
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -8,6 +8,8 @@ import 'package:project_social_media_application_dcgc/Screens/LoginPage.dart';
 import 'package:project_social_media_application_dcgc/Screens/UpdateProfilePage.dart';
 import 'package:project_social_media_application_dcgc/Screens/ViewPostPage.dart';
 
+
+// after logging in, the application will move to this page where he/she can write posts and view the posts of others
 class HomePage extends StatefulWidget {
   String? token;
   String? username;
@@ -28,13 +30,16 @@ class _HomePageState extends State<HomePage> {
   _HomePageState(this.token_authorization, this.username);
   List<String> dropdownitems = ['Friends Only', 'Public'];
   String? selecteditem = 'Friends Only';
+  //here is the controller for creating posts 
   final TextEditingController _Createpost = TextEditingController();
+  //here is the controller which is used for pagination 
   final ScrollController _Viewpost = ScrollController();
   var posts = [];
   
 
   
-  
+  //here is the function that uses a get request 
+  // to get the account firstname and lastname of the users account 
   void getAccountDetails() async{
     
     final url = "https://cmsc-23-2022-bfv6gozoca-as.a.run.app/api/user";
@@ -59,6 +64,7 @@ class _HomePageState extends State<HomePage> {
     // print("${_Email.text}");
   }
 
+  //here is the function that will be in charge of creating posts through post requests 
   void createPost() async{
     
     final url = "https://cmsc-23-2022-bfv6gozoca-as.a.run.app/api/post";
@@ -86,7 +92,7 @@ class _HomePageState extends State<HomePage> {
           }
     // print("${_Email.text}");
   }
-
+      //here is the function that will be in charge of deleting posts through delete requests 
     void deletePost(String? postId) async{
     
     final url = "https://cmsc-23-2022-bfv6gozoca-as.a.run.app/api/post/";
@@ -114,7 +120,7 @@ class _HomePageState extends State<HomePage> {
           }
     // print("${_Email.text}");
   }
-
+  //here is the function that will get posts from the server with respect to pagination 
   Future getPosts(int numOfPosts, String? lastId) async{
     final url = "https://cmsc-23-2022-bfv6gozoca-as.a.run.app/api/post";
 
@@ -146,9 +152,16 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     // TODO: implement initState
+
+    //on startup of the page the aapp will immediately get the accounts first name and last name 
+    // as well as the first 8 posts of their news feed 
     super.initState();
     getAccountDetails();
     getPosts(8, "");
+
+    //pagination works if the user scrolled to the botton then the application will get more posts from the server
+    //is the user scrolls down to the bottom again the process will repeat 
+    //until there are no more posts available in the server 
     _Viewpost.addListener(() {
       if(_Viewpost.position.maxScrollExtent == _Viewpost.offset){
 
@@ -182,6 +195,8 @@ class _HomePageState extends State<HomePage> {
           Container(
                   padding: EdgeInsets.symmetric(horizontal: 20) ,
                   margin: EdgeInsets.only(top:10, ),
+
+                  //this is the textfield used in creating posts 
                   child: TextFormField(
                     maxLines: null,
                     minLines: 4,
@@ -210,7 +225,8 @@ class _HomePageState extends State<HomePage> {
                   //width: MediaQuery.of(context).size.width * 0.05,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    
+                    //after the user wrote something in the proper textfiled 
+                    //the user must click the post button to create the post 
                     ElevatedButton(
                     
                     child: Text('Post', 
@@ -234,7 +250,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   Container(
-                      
+                      // here is dropdown button that will indicate if the post the user will make is puclic or for friends only
                       child: DropdownButton<String>(
                       value: selecteditem,
                       dropdownColor: Color.fromRGBO(58, 66, 86, 1.0),
@@ -249,12 +265,14 @@ class _HomePageState extends State<HomePage> {
                     
                   ],
                 ),
-                
+                // the list view below is the one responsible for displaying the posts for the users news feed
+                // the pagination will happen per 8 posts 
+                // is the user scrolls at the bottom of the posts then the application will get another 8 posts 
                 ListView.builder(
                   shrinkWrap: true,
                   padding: EdgeInsets.symmetric(horizontal: 20) ,
-                  
-                  // physics: NeverScrollableScrollPhysics(),
+          
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: posts.length+1,
                   itemBuilder: (context, i){
                     if(i < posts.length){
@@ -268,6 +286,8 @@ class _HomePageState extends State<HomePage> {
                                                           Text("YOU posted at ${DateFormat('MM/dd/yyyy, hh:mm a').format(datetime)}", style: TextStyle(fontSize: 14, fontWeight:FontWeight.bold, ),):
                                                           Text("${currentpost["username"]} posted at ${DateFormat('MM/dd/yyyy, hh:mm a').format(datetime)}",style: TextStyle(fontSize: 14, fontWeight:FontWeight.bold,),),
                                                   subtitle: Text(" -> ${currentpost["text"]}", style: TextStyle(fontSize: 20),),
+                                                  //if the post displayed was from the user they will have the option to edit or delete the posts 
+                                                  //by clicking the proper trailing icon 
                                                   trailing: currentpost["username"] == username? Row(children: [
                                                             IconButton(onPressed: () {setState(() {deletePost(currentpost["id"]);
                                                                                                   Future.delayed(Duration(milliseconds: 750), (){
@@ -283,6 +303,7 @@ class _HomePageState extends State<HomePage> {
                                                             });}, icon: Icon(Icons.create_sharp)),],
                                                   mainAxisSize: MainAxisSize.min,
                                                   ):null,
+                                      // the listtile itself can be clicked in order to view the posts details 
                                       onTap:(){
                                       Navigator.push(context, MaterialPageRoute(builder: (context) => ViewPostPage(currentpost["text"],token_authorization, currentpost["id"],currentpost["username"],currentpost["date"], currentpost["updated"])));
                                       } ,
@@ -307,7 +328,7 @@ class _HomePageState extends State<HomePage> {
 
 
   
-
+//here lies the menu on the left of the user which allows the user to logout and update their account 
 class NavigationDrawer extends StatelessWidget {
   final String? username;
   final String? firstname;
@@ -329,6 +350,8 @@ class NavigationDrawer extends StatelessWidget {
     ),
   );
 }
+// the menu header will display all account details like username, firstname, lastname
+//everything except the password 
 Widget MenuHeader(BuildContext context, String? username, String? firstname, String? lastname) =>Container(
     color: Colors.lightBlue,
     padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
@@ -352,12 +375,13 @@ Widget MenuHeader(BuildContext context, String? username, String? firstname, Str
     ),
   );
 
-
+  // here are the menu items of the drawer 
   Widget MenuItems(BuildContext context, String? token_authorization ,String? username, String? firstname, String? lastname) =>Container(
     padding: EdgeInsets.all(24),
     child:  Wrap(
         runSpacing: 15,
         children: [
+          //here is the option to close the drawer
           ListTile(
             leading: const Icon(Icons.arrow_back_ios),
             title: Text("Return"),
@@ -366,6 +390,7 @@ Widget MenuHeader(BuildContext context, String? username, String? firstname, Str
             },
           ),
           // const Divider(color: Colors.lightBlue,),
+          //here is the option to update your profile 
           ListTile(
             leading: const Icon(Icons.settings),
             title: Text("Update Profile"),
@@ -374,12 +399,8 @@ Widget MenuHeader(BuildContext context, String? username, String? firstname, Str
 
             },
           ),
-          // ListTile(
-          //   leading: const Icon(Icons.account_box_outlined),
-          //   title: Text("View Other People"),
-          //   onTap: (){
-          //   },
-          // ),
+          
+          //and here is the option to logout 
           ListTile(
             leading: const Icon(Icons.logout),
             title: Text("Logout"),

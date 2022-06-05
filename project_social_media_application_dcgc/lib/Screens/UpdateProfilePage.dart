@@ -5,7 +5,8 @@ import 'package:project_social_media_application_dcgc/Screens/LoginPage.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 
-
+// you will be moved to this page when cliked the "update profile" option on the navigation drawer 
+// int the homepage
 class UpdateProfilePage extends StatefulWidget {
   String? token;
   String? username;
@@ -24,12 +25,14 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   String? firstname;
   String? lastname;
   _UpdateProfilePageState(this.token_authorization, this.username, this.firstname, this.lastname);
+  //here are the controllers used for taking in the values of the textfields of this page
   final TextEditingController _NewFirstName = TextEditingController();
   final TextEditingController _NewLastName = TextEditingController();
   final TextEditingController _OldPassword = TextEditingController();
   final TextEditingController _NewPassword = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+// this functions uses put requests to edit the existing credentials about your profile 
   void updateProfile() async{
     final url = "https://cmsc-23-2022-bfv6gozoca-as.a.run.app/api/user";
     try{
@@ -78,8 +81,9 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title:Text('Signup Page'),
+      appBar: AppBar(title:Text('Update Profile Page'),
       ),
+      backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -91,10 +95,10 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
               children: [
                 SizedBox(height: 50,),
                 Text(
-                  'Signup Page',
+                  'Update Profile Page',
                   style: TextStyle(
                     fontWeight:FontWeight.bold, 
-                      color: Colors.black, 
+                      color: Colors.white, 
                         fontSize: 40),
                 ),
                 SizedBox(height: 10,),
@@ -102,7 +106,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                   'It wont take long',
                   style: TextStyle(
                     fontWeight:FontWeight.bold, 
-                      color: Colors.black, 
+                      color: Colors.white, 
                         fontSize: 25),
                 ),
                 
@@ -113,6 +117,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
+                  //here is the textfield the will display your current first name 
                   child: TextFormField(
                     enabled: false,
                     decoration: InputDecoration(
@@ -133,6 +138,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                   width: 20,
                 ),
                 Expanded(
+                  //here is the textfield the will ask for your new first name
                   child: TextFormField(
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
@@ -170,6 +176,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
+                  //here is the textfield the will display your current last name
                   child: TextFormField(
                     enabled: false,
                     decoration: InputDecoration(
@@ -190,6 +197,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                   width: 20,
                 ),
                 Expanded(
+                  //here is the textfield the will ask you for your new last name
                   child: TextFormField(
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
@@ -226,6 +234,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
+                  //here is the textfield the will display ask you for your current password 
                   child: TextFormField(
                     
                     decoration: InputDecoration(
@@ -252,10 +261,13 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                       filled: true,
                     ),
                     controller: _OldPassword,
+
                     validator: (value){
+                      // the new password textfield must not be empty 
                       if(value == _NewPassword.text && value != ""){
                         return "Old Password and New Password are the same :(";
                       }else if(value!.length != value.trim().length ){
+                        // the new password textfield and old password textfield must not be the same
                           return "text field should not be filled with only spaces:(";
                       }
                       return null;
@@ -266,6 +278,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                   width: 20,
                 ),
                 Expanded(
+                  //here is the textfield the will ask you for your new password 
                   child: TextFormField(
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
@@ -291,9 +304,11 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                     ),
                     controller: _NewPassword,
                     validator: (value){
+                      // the old password textfield must not be empty 
                       if(value == _OldPassword.text && value != ""){
                         return "Old Password and New Password are the same :(";
                       }else if(value!.length != value.trim().length ){
+                        // the new password textfield and old password textfield must not be the same
                           return "text field should not be filled with only spaces:(";
                       }
                       return null;

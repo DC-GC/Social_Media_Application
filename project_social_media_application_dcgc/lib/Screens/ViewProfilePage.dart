@@ -1,9 +1,11 @@
-import 'dart:html';
+// import 'dart:html';
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+// in the view post page if the user clcked on the authors username then he/she will be greeted with this page 
+//this page is very similar to the homepage but all the posts seen in this page came from one person
 class ViewProfilePage extends StatefulWidget {
   String? token;
   String? username;
@@ -15,6 +17,7 @@ class ViewProfilePage extends StatefulWidget {
 }
 
 class _ViewProfilePageState extends State<ViewProfilePage> {
+  //here is where the username, firstname, lastname of the post author is found 
   String? token_authorization;
   String? username;
   String? firstname;
@@ -23,6 +26,8 @@ class _ViewProfilePageState extends State<ViewProfilePage> {
   final ScrollController _Viewpost = ScrollController();
   var posts = [];
 
+
+  //similarly to the homepage the same function uses get requests to get the authors firstname and lastname
   void getAccountDetails() async{
     
     final url = "https://cmsc-23-2022-bfv6gozoca-as.a.run.app/api/user";
@@ -47,7 +52,7 @@ class _ViewProfilePageState extends State<ViewProfilePage> {
     // print("${_Email.text}");
   }
 
-
+  //this will be the function to get the posts that are from the author
   Future getPosts(int numOfPosts, String? lastId) async{
     final url = "https://cmsc-23-2022-bfv6gozoca-as.a.run.app/api/post";
 
@@ -115,7 +120,8 @@ class _ViewProfilePageState extends State<ViewProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                   CircleAvatar(radius: 50,),
-                  SizedBox(width:MediaQuery.of(context).size.width * 0.025,),
+                  //SizedBox(width:100),
+                  SizedBox(width:MediaQuery.of(context).size.width * 0.05,),
                   // Text("Date created: ", style: TextStyle(
                   //                                             fontWeight:FontWeight.bold, 
                   //                                             color: Colors.white, 
@@ -133,20 +139,20 @@ class _ViewProfilePageState extends State<ViewProfilePage> {
                   style: TextStyle(color: Colors.white, fontSize: 18.0),
                   ),
                   ]),
-                  SizedBox(width:MediaQuery.of(context).size.width * 0.50,),
+                  SizedBox(width:MediaQuery.of(context).size.width * 0.20,),
                   
                   ],
                 ),
-                
+                SizedBox(height: 10,),
                 Text("Posts from $username",
                   style: TextStyle(color: Colors.white, fontSize: 35.0),
                   ),
-
+                // this list view is responsible for displaying all the authors posts 
                 ListView.builder(
                   shrinkWrap: true,
                   padding: EdgeInsets.symmetric(horizontal: 20) ,
                   
-                  // physics: NeverScrollableScrollPhysics(),
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: posts.length+1,
                   itemBuilder: (context, i){
                     if(i < posts.length){

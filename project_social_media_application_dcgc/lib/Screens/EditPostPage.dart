@@ -1,8 +1,10 @@
-import 'dart:html';
+// import 'dart:html';
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:project_social_media_application_dcgc/Screens/HomePage.dart';
+
+//you will be promptedto this page if you clicked the edit icon beside one of your posts 
 
 class EditPostPage extends StatefulWidget {
   String? posttext;
@@ -88,6 +90,7 @@ class _EditPostPageState extends State<EditPostPage> {
           Container(
                   padding: EdgeInsets.symmetric(horizontal: 20) ,
                   margin: EdgeInsets.only(top:10, ),
+                  //the text field below is where you can type your new post 
                   child: TextFormField(
                     maxLines: null,
                     minLines: 4,
@@ -116,7 +119,8 @@ class _EditPostPageState extends State<EditPostPage> {
                   //width: MediaQuery.of(context).size.width * 0.05,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    
+                    //by clicking the "edit post" button what ever you have written in the textfield above will 
+                    //replace your previous post essentialy editing it 
                     ElevatedButton(
                     
                     child: Text('Edit Post', 

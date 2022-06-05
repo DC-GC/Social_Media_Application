@@ -3,6 +3,8 @@ import 'package:project_social_media_application_dcgc/Screens/LoginPage.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 
+
+// if the user does not have an account he/she can create an account in this page 
 class SignupPage extends StatefulWidget {
   
   @override
@@ -10,6 +12,7 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  // below are the controllers of all the texfields within the page 
   final TextEditingController _Username = TextEditingController();
   final TextEditingController _CreatePassword = TextEditingController();
   final TextEditingController _ConfirmPassword = TextEditingController();
@@ -17,6 +20,7 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _CreateLastName = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  // here is the function that uses a post request along with the users credentials to create an account
   void create_account() async{
     final url = "https://cmsc-23-2022-bfv6gozoca-as.a.run.app/api/user";
     final authorization = "Zxi!!YbZ4R9GmJJ!h5tJ9E5mghwo4mpBs@*!BLoT6MFLHdMfUA%";
@@ -34,6 +38,7 @@ class _SignupPageState extends State<SignupPage> {
                 "lastName": _CreateLastName.text,
                 }),
           );
+          // if account creation is successful 
           if (response.statusCode == 200) {
               print(response.body);
               ScaffoldMessenger.of(this.context).showSnackBar(
@@ -84,6 +89,7 @@ class _SignupPageState extends State<SignupPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
+                  //here is the textfield where the user will input his/her firstname
                   child: TextFormField(
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
@@ -121,6 +127,7 @@ class _SignupPageState extends State<SignupPage> {
                   width: 20,
                 ),
                 Expanded(
+                  //here is the textfield where the user will input his/her last name
                   child: TextFormField(
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
@@ -179,6 +186,7 @@ class _SignupPageState extends State<SignupPage> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 20) ,
                   margin: EdgeInsets.only(top:5, ),
+                  //here is the textfield where the user will input his/her username
                   child: TextFormField(
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
@@ -214,6 +222,7 @@ class _SignupPageState extends State<SignupPage> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 20) ,
                   margin: EdgeInsets.only(top:5, ),
+                  //here is the textfield where the user will input his/her password
                   child: TextFormField(
                     obscureText: true,
                     decoration: InputDecoration(
@@ -250,6 +259,7 @@ class _SignupPageState extends State<SignupPage> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 20) ,
                   margin: EdgeInsets.only(top:5, ),
+                  //here is the textfield where the user will confirm his/her password
                   child: TextFormField(
                     obscureText: true,
                     decoration: InputDecoration(
@@ -286,7 +296,7 @@ class _SignupPageState extends State<SignupPage> {
                 Container(
                   width: MediaQuery.of(context).size.width,
                   margin: EdgeInsets.all(27),
-                  
+                  //the application will try to create an account with the users credentials when he/she clicked this elevated button 
                   child: ElevatedButton(
                     child: Text('Create Account', 
                     style:TextStyle(color: Colors.white),
@@ -314,6 +324,7 @@ class _SignupPageState extends State<SignupPage> {
                                                               color: Colors.white, 
                                                               fontSize: 14,
                                                               ),),
+                      // the user can return to the login page using the btton below
                       TextButton(
                         style: TextButton.styleFrom(
                           textStyle: const TextStyle(fontSize: 14),

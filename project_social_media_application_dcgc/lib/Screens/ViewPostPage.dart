@@ -1,10 +1,12 @@
-import 'dart:html';
+// import 'dart:html';
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:project_social_media_application_dcgc/Screens/ViewProfilePage.dart';
 
+// when the user clicks on a particular page this will be the page that greets them 
+// it will shows the post itself along with when it was created, updated and who the author is 
 class ViewPostPage extends StatefulWidget {
   String? posttext;
   String? token;
@@ -31,8 +33,12 @@ class _ViewPostPageState extends State<ViewPostPage> {
   // String? datetimestring = DateFormat('MM/dd/yyyy, hh:mm a').format(datetime); 
   @override
   Widget build(BuildContext context) {
+    // since the time the post was created was in epoch time this is where the epoch time of when the post was created is converted
+    //into the mm/dd/yyyy format 
     var createddatetime = DateTime.fromMillisecondsSinceEpoch(date);
     String? datetimestring = DateFormat('MM/dd/yyyy, hh:mm a').format(createddatetime);
+    // since the time the post was updated was in epoch time this is where the epoch time of when the post was updated is converted
+    //into the mm/dd/yyyy format 
     var updateddatetime = DateTime.fromMillisecondsSinceEpoch(updated);
     String? updateddatetimestring = DateFormat('MM/dd/yyyy, hh:mm a').format(updateddatetime);
     _Post.text = posttext!;
@@ -58,6 +64,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
           Container(
                   padding: EdgeInsets.symmetric(horizontal: 20) ,
                   margin: EdgeInsets.only(top:10, ),
+                  // the post content will be displayed within this disabled textfield 
                   child: TextFormField(
                     enabled: false,
                     maxLines: null,
@@ -78,12 +85,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
                   ),
                 ),
                 SizedBox(height: 10,),
-                Row(
-                
-                  //width: MediaQuery.of(context).size.width * 0.05,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                  Text("Date created: $datetimestring", style: TextStyle(
+                Text("Date created: $datetimestring", style: TextStyle(
                                                               fontWeight:FontWeight.bold, 
                                                               color: Colors.white, 
                                                               fontSize: 18,
@@ -95,11 +97,31 @@ class _ViewPostPageState extends State<ViewPostPage> {
                                                               fontSize: 18,
                                                               fontStyle: FontStyle.italic,
                                                               ),),
+                // Row(
+                
+                //   //width: MediaQuery.of(context).size.width * 0.05,
+                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //   children: [
+                //   //the times when the post is created and edited is displayed in this row 
+                //   Text("Date created: $datetimestring", style: TextStyle(
+                //                                               fontWeight:FontWeight.bold, 
+                //                                               color: Colors.white, 
+                //                                               fontSize: 18,
+                //                                               fontStyle: FontStyle.italic,
+                //                                               ),),
+                //   Text("Date updated: $updateddatetimestring",style: TextStyle(
+                //                                               fontWeight:FontWeight.bold, 
+                //                                               color: Colors.white, 
+                //                                               fontSize: 18,
+                //                                               fontStyle: FontStyle.italic,
+                //                                               ),),
                    
                     
-                  ],
-                ),
+                //   ],
+                // ),
                  SizedBox(height: 25,),
+                // username of the author of the post is displayed here 
+                
                 Text(
                   'Author',
                   style: TextStyle(
@@ -112,6 +134,7 @@ class _ViewPostPageState extends State<ViewPostPage> {
                   radius: 50,
                   ),
                 SizedBox(height: 10,),
+                //the user can click the authors name to view his/her profile
                 TextButton(child: Text("$authorusername", style: TextStyle(
                                                               fontWeight:FontWeight.bold, 
                                                               color: Colors.white, 
